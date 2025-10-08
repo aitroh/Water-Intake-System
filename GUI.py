@@ -308,7 +308,7 @@ class MainWindow(QWidget):
 
         # Update visuals
         self.donut.plot_donut_percent(pct)
-        self.status_label.setText(f"Today: {consumed} ml")
+        self.status_label.setText(f"Today: {consumed} / {target} ml")
         self.progress_bar.setValue(pct)
 
 
@@ -409,3 +409,4 @@ class MainWindow(QWidget):
     def closeEvent(self, event):
         self.db.close()
         event.accept()
+
