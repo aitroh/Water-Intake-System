@@ -1,4 +1,4 @@
-<img width="518" height="752" alt="image" src="https://github.com/user-attachments/assets/4d3ef9ed-93d6-4d87-86b2-abb92e8a14c1" /># Water Intake System
+# Water Intake System
 
 A simple desktop application to log and manage daily water intake, built with Python and PyQt6.
 
