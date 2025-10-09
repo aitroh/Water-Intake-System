@@ -24,7 +24,19 @@ This Water Intake System lets users record how much water they drink, view their
 
 ## Screenshots
 
-*(Add images to the `screenshots/` folder and update this section with GitHub image links.)*
+<img width="883" height="624" alt="image" src="https://github.com/user-attachments/assets/c7e0ba4b-0510-43d2-bbf3-d04e35175d9b" />
+<img width="902" height="625" alt="image" src="https://github.com/user-attachments/assets/0542c04d-b30a-4257-9985-bff2ae47cb55" />
+
+<img width="909" height="640" alt="image" src="https://github.com/user-attachments/assets/e134ba1e-8da8-445c-a479-525e1872b6fc" />
+<img width="540" height="740" alt="image" src="https://github.com/user-attachments/assets/21a50633-2c61-4d64-950b-1e0326beb61d" />
+<img width="205" height="146" alt="image" src="https://github.com/user-attachments/assets/66ac2f04-68d8-4e72-9720-b8e012a297b8" />
+<img width="891" height="633" alt="image" src="https://github.com/user-attachments/assets/57afacc4-9fd6-444f-9022-e124d5d9a207" />
+
+
+
+
+
+
 
 ## How to run the program
 
