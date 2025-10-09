@@ -170,6 +170,11 @@ class Database:
         rows = c.fetchall()
         return [(r["date"], int(r["total"] or 0)) for r in rows]
 
+    def clear_entries_for_date(self, date_str):
+        cur = self.conn.cursor()
+        cur.execute("DELETE FROM intake WHERE DATE(timestamp) = ?", (date_str,))
+        self.conn.commit()
+
     def export_history_txt(self, file_path: str):
         try:
             rows = self.get_history(3650)  # get up to 10 years of data
