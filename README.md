@@ -30,12 +30,13 @@ This Water Intake System lets users record how much water they drink, view their
 
 
 <img width="926" height="628" alt="image" src="https://github.com/user-attachments/assets/a870f524-607b-4ec0-a93c-bb7c6778dd4e" />
+<img width="886" height="635" alt="image" src="https://github.com/user-attachments/assets/b4635eef-f3e4-4056-9ac9-49c4fa99549d" />
 <img width="903" height="639" alt="image" src="https://github.com/user-attachments/assets/d6d880bd-2b5e-4dcd-9b1d-109e50d54ed8" />
 <img width="898" height="654" alt="image" src="https://github.com/user-attachments/assets/cbcc38f1-82c2-4743-a3df-f50dbe392fae" />
 
 
 
-<img width="886" height="635" alt="image" src="https://github.com/user-attachments/assets/b4635eef-f3e4-4056-9ac9-49c4fa99549d" />
+
 
 
 
