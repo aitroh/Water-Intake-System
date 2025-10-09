@@ -170,14 +170,18 @@ class Database:
         rows = c.fetchall()
         return [(r["date"], int(r["total"] or 0)) for r in rows]
 
-    def export_history_csv(self, file_path: str):
-        import csv
-        rows = self.get_history(3650)  # export a lot by default
-        with open(file_path, "w", newline="", encoding="utf-8") as f:
-            writer = csv.writer(f)
-            writer.writerow(["date", "total_ml"])
-            for dt, total in rows:
-                writer.writerow([dt, total])
+    def export_history_txt(self, file_path: str):
+        try:
+            rows = self.get_history(3650)  # get up to 10 years of data
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.write("Water Intake History\n")
+                f.write("=====================\n\n")
+                for dt, total in rows:
+                    f.write(f"{dt}: {total} ml\n")
+            return True  # success
+        except Exception as e:
+            print(f"Error exporting history: {e}")
+            return False
 
     def close(self):
         self.conn.close()
