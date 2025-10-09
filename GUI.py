@@ -1,3 +1,4 @@
+
 # GUI.py
 """
 Updated GUI: same layout as before but adds:
@@ -9,12 +10,14 @@ Updated GUI: same layout as before but adds:
 from PyQt6.QtWidgets import (
     QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QMessageBox,
     QListWidget, QListWidgetItem, QSpinBox, QFrame, QMenu, QFileDialog,
-    QProgressBar
+    QProgressBar, QDialog
+
+
 )
 from PyQt6.QtCore import Qt, QTimer
 from database import Database
 from styles import Styles
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 import matplotlib
 matplotlib.use("QtAgg")
@@ -48,11 +51,55 @@ class DonutCanvas(FigureCanvas):
         self.axes.axis('off')
         self.draw()
 
+class WeeklyChartCanvas(FigureCanvas):
+    def __init__(self, parent=None, db=None):
+        self.db = db
+        self.fig = Figure(figsize=(4, 3), facecolor="#2a2b2f")
+        super().__init__(self.fig)
+        self.ax = self.fig.add_subplot(111)
+        self.fig.tight_layout(pad=3)
+        self.plot_weekly_data()
+
+    def plot_weekly_data(self):
+        self.ax.clear()
+        self.ax.set_facecolor("#2a2b2f")
+
+        # Get last 7 days
+        today = date.today()
+        days = [(today - timedelta(days=i)).isoformat() for i in range(6, -1, -1)]
+        labels = [(today - timedelta(days=i)).strftime("%a") for i in range(6, -1, -1)]
+
+        data = []
+        for d in days:
+            total = self.db.get_intake_for_date(d)
+            data.append(total)
+
+        # Plot bar chart
+        bars = self.ax.bar(labels, data, color="#4fc3f7", edgecolor="#1e1f23")
+
+        # Add values on top of bars
+        for bar in bars:
+            height = bar.get_height()
+            if height > 0:
+                self.ax.text(
+                    bar.get_x() + bar.get_width()/2, height + 30,
+                    f"{int(height)}", ha="center", va="bottom",
+                    color="#e6eef6", fontsize=8
+                )
+
+        # Chart styling
+        self.ax.set_title("Weekly Water Intake", color="#e6eef6", fontsize=12, pad=10)
+        self.ax.tick_params(colors="#a0b3c6")
+        for spine in self.ax.spines.values():
+            spine.set_color("#a0b3c6")
+        self.ax.set_ylabel("ml", color="#a0b3c6")
+
+        self.draw()
+
 
 # ---------- Report window ----------
-from PyQt6.QtWidgets import QDialog
 class ReportWindow(QDialog):
-    def __init__(self, db: Database, parent=None):
+    def __init__(self, db, parent=None):
         super().__init__(parent)
         self.db = db
         self.setWindowTitle("Intake Report")
@@ -94,11 +141,13 @@ class ReportWindow(QDialog):
     def _build_ui(self):
         layout = QVBoxLayout()
 
-        # Top: Donut chart
-        donut_card = QFrame(); donut_card.setObjectName("card")
-        v = QVBoxLayout()
-        self.donut = DonutCanvas(self, size=(3.2, 3.2))
-        v.addWidget(self.donut)
+        # Top: Weekly chart (replaces donut)
+        chart_card = QFrame(); chart_card.setObjectName("card")
+        cv = QVBoxLayout()
+        self.weekly_chart = WeeklyChartCanvas(self, db=self.db)
+        cv.addWidget(self.weekly_chart)
+        chart_card.setLayout(cv)
+        layout.addWidget(chart_card)
 
         # Styled Remaining and Target section
         metric_layout = QHBoxLayout()
@@ -121,10 +170,7 @@ class ReportWindow(QDialog):
 
         metric_layout.addLayout(rem_box)
         metric_layout.addLayout(target_box)
-        v.addLayout(metric_layout)
-
-        donut_card.setLayout(v)
-        layout.addWidget(donut_card)
+        layout.addLayout(metric_layout)
 
         # Bottom: Summary section
         summary_card = QFrame(); summary_card.setObjectName("card")
@@ -141,23 +187,28 @@ class ReportWindow(QDialog):
         self.setLayout(layout)
 
     def refresh(self):
+        # Update weekly chart
+        self.weekly_chart.plot_weekly_data()
+
+        # Update metrics
         target = self.db.get_daily_target_ml()
         today = date.today().isoformat()
         consumed = self.db.get_intake_for_date(today)
         remaining = max(0, target - consumed)
-        pct = int(consumed / target * 100) if target > 0 else 0
-
-        self.donut.plot_donut_percent(pct)
         self.rem_label_value.setText(f"{remaining} ml")
         self.target_label_value.setText(f"{target} ml")
 
-        # Summary section
-        self.date_label.setText(f"Date: {today}")
+        # Summary section (weekly)
+        self.date_label.setText("Weekly Intake Summary")
         self.summary_list.clear()
-        for dt, total in reversed(self.db.get_history(6)):
-            self.summary_list.addItem(f"{total} ml")
 
-
+        history = self.db.get_history(7)  # last 7 days
+        if history:
+            total_week = 0
+            for dt, total in reversed(history):
+                total_week += total
+                day_name = date.fromisoformat(dt).strftime("%a, %b %d")
+                self.summary_list.addItem(f"{day_name}: {total} ml")
 
 
 # ---------- Main window ----------
@@ -176,6 +227,19 @@ class MainWindow(QWidget):
         self._refresh_timer = QTimer(self)
         self._refresh_timer.timeout.connect(self.refresh_ui)
         self._refresh_timer.start(30_000)
+
+    def reset_today_data(self):
+        reply = QMessageBox.question(
+            self,
+            "Confirm Reset",
+            "Are you sure you want to clear today's data?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        if reply == QMessageBox.StandardButton.Yes:
+            today = date.today().isoformat()
+            self.db.clear_entries_for_date(today)
+            QMessageBox.information(self, "Reset", "Today's data has been cleared.")
+            self.refresh_ui()
 
     def _apply_dark_style(self):
         self.setStyleSheet("""
@@ -296,8 +360,12 @@ class MainWindow(QWidget):
         self.log_btn.clicked.connect(self.log_intake)
         self.view_btn.clicked.connect(self.open_report_window)
         self.export_btn.clicked.connect(self.export_txt)
+        self.reset_btn = QPushButton("Reset (Demo)")
+        bl.addWidget(self.reset_btn)
+        self.reset_btn.setStyleSheet("background:#ff5555;color:white;font-weight:bold;")
+        self.reset_btn.clicked.connect(self.reset_today_data)
 
-    # ---------- Core actions ----------
+
     def refresh_ui(self):
         target = self.db.get_daily_target_ml()
         today = date.today().isoformat()
@@ -409,4 +477,3 @@ class MainWindow(QWidget):
     def closeEvent(self, event):
         self.db.close()
         event.accept()
-
