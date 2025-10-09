@@ -1,4 +1,3 @@
-
 # GUI.py
 """
 Updated GUI: same layout as before but adds:
