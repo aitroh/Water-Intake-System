@@ -1,4 +1,4 @@
-# Water Intake System
+<img width="518" height="752" alt="image" src="https://github.com/user-attachments/assets/4d3ef9ed-93d6-4d87-86b2-abb92e8a14c1" /># Water Intake System
 
 A simple desktop application to log and manage daily water intake, built with Python and PyQt6.
 
@@ -24,15 +24,18 @@ This Water Intake System lets users record how much water they drink, view their
 
 ## Screenshots
 
-<img width="883" height="624" alt="image" src="https://github.com/user-attachments/assets/c7e0ba4b-0510-43d2-bbf3-d04e35175d9b" />
-<img width="902" height="625" alt="image" src="https://github.com/user-attachments/assets/0542c04d-b30a-4257-9985-bff2ae47cb55" />
+<img width="895" height="637" alt="image" src="https://github.com/user-attachments/assets/821ffbbc-668a-4619-9649-f2c99995deb2" />
+<img width="890" height="631" alt="image" src="https://github.com/user-attachments/assets/53cad833-0d38-476f-9424-ed882547f319" />
+<img width="518" height="752" alt="image" src="https://github.com/user-attachments/assets/6e6c9e77-28bd-42a9-9990-0f19e5a2f08a" />
 
-<img width="909" height="640" alt="image" src="https://github.com/user-attachments/assets/e134ba1e-8da8-445c-a479-525e1872b6fc" />
-<img width="506" height="697" alt="image" src="https://github.com/user-attachments/assets/ffe1ae6f-4511-4e53-937d-e45a3f973c7a" />
 
-<img width="205" height="146" alt="image" src="https://github.com/user-attachments/assets/66ac2f04-68d8-4e72-9720-b8e012a297b8" />
-<img width="891" height="633" alt="image" src="https://github.com/user-attachments/assets/57afacc4-9fd6-444f-9022-e124d5d9a207" />
+<img width="926" height="628" alt="image" src="https://github.com/user-attachments/assets/a870f524-607b-4ec0-a93c-bb7c6778dd4e" />
+<img width="903" height="639" alt="image" src="https://github.com/user-attachments/assets/d6d880bd-2b5e-4dcd-9b1d-109e50d54ed8" />
+<img width="898" height="654" alt="image" src="https://github.com/user-attachments/assets/cbcc38f1-82c2-4743-a3df-f50dbe392fae" />
 
+
+
+<img width="886" height="635" alt="image" src="https://github.com/user-attachments/assets/b4635eef-f3e4-4056-9ac9-49c4fa99549d" />
 
 
 
